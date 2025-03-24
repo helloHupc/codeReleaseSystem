@@ -1,17 +1,22 @@
 package bootstrap
 
 import (
+	"codeReleaseSystem/app/models/user"
 	"codeReleaseSystem/pkg/config"
 	"codeReleaseSystem/pkg/database"
+	"errors"
 	"fmt"
+	"time"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"time"
 )
 
+// SetupDB 初始化数据库和 ORM
 func SetupDB() {
+
 	var dbConfig gorm.Dialector
 	switch config.Get("database.connection") {
 	case "mysql":
@@ -24,15 +29,15 @@ func SetupDB() {
 			config.Get("database.mysql.database"),
 			config.Get("database.mysql.charset"),
 		)
-
 		dbConfig = mysql.New(mysql.Config{
 			DSN: dsn,
 		})
 	case "sqlite":
+		// 初始化 sqlite
 		database := config.Get("database.sqlite.database")
 		dbConfig = sqlite.Open(database)
 	default:
-		panic("database connection not supported")
+		panic(errors.New("database connection not supported"))
 	}
 
 	// 连接数据库，并设置 GORM 的日志模式
@@ -44,4 +49,6 @@ func SetupDB() {
 	database.SQLDB.SetMaxIdleConns(config.GetInt("database.mysql.max_idle_connections"))
 	// 设置每个链接的过期时间
 	database.SQLDB.SetConnMaxLifetime(time.Duration(config.GetInt("database.mysql.max_life_seconds")) * time.Second)
+
+	database.DB.AutoMigrate(&user.User{})
 }
