@@ -3,6 +3,7 @@ package auth
 import (
 	v1 "codeReleaseSystem/app/http/controllers/api/v1"
 	"codeReleaseSystem/app/models/user"
+	"codeReleaseSystem/app/requests"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -14,20 +15,26 @@ type SignupController struct {
 
 // IsPhoneExist 检测手机号是否被注册
 func (sc *SignupController) IsPhoneExist(c *gin.Context) {
-	// 定义接收数据结构体json
-	type Param struct {
-		Phone string `json:"phone"`
-	}
+
 	// 获取请求参数
-	param := Param{}
+	param := requests.SignupPhoneExistRequest{}
 	if err := c.ShouldBindJSON(&param); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	// 响应
+	// 表单验证
+	errs := requests.ValidateSignupPhoneExist(&param, c)
+	if len(errs) > 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": errs,
+		})
+		return
+	}
+
+	// 返回响应
 	c.JSON(http.StatusOK, gin.H{
 		"exist": user.IsPhoneExist(param.Phone),
 	})
