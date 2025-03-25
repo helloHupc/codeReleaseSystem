@@ -4,8 +4,9 @@ import (
 	v1 "codeReleaseSystem/app/http/controllers/api/v1"
 	"codeReleaseSystem/app/models/user"
 	"codeReleaseSystem/app/requests"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // SignupController 注册控制器
@@ -16,21 +17,9 @@ type SignupController struct {
 // IsPhoneExist 检测手机号是否被注册
 func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 
-	// 获取请求参数
 	param := requests.SignupPhoneExistRequest{}
-	if err := c.ShouldBindJSON(&param); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	// 表单验证
-	errs := requests.ValidateSignupPhoneExist(&param, c)
-	if len(errs) > 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": errs,
-		})
+	if ok, errors := requests.ValidateRequest(c, &param, requests.ValidateSignupPhoneExist); !ok {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errors})
 		return
 	}
 
@@ -41,21 +30,9 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 }
 
 func (sc *SignupController) IsEmailExist(c *gin.Context) {
-	// 获取请求参数
 	param := requests.SignupEmailExistRequest{}
-	if err := c.ShouldBindJSON(&param); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"param_error": err.Error(),
-		})
-		return
-	}
-
-	// 表单验证
-	errs := requests.ValidateSignupEmailExist(&param, c)
-	if len(errs) > 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": errs,
-		})
+	if ok, errs := requests.ValidateRequest(c, &param, requests.ValidateSignupEmailExist); !ok {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errs})
 		return
 	}
 
