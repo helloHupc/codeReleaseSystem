@@ -27,16 +27,7 @@ func ValidateSignupPhoneExist(data interface{}, c *gin.Context) map[string][]str
 		},
 	}
 
-	opts := govalidator.Options{
-		Data:          data,
-		Rules:         rules,
-		Messages:      messages,
-		TagIdentifier: "valid",
-	}
-
-	// 开始验证
-	return govalidator.New(opts).ValidateStruct()
-
+	return doValidate(data, rules, messages)
 }
 
 func ValidateSignupEmailExist(data interface{}, c *gin.Context) map[string][]string {
@@ -53,11 +44,6 @@ func ValidateSignupEmailExist(data interface{}, c *gin.Context) map[string][]str
 			"max:Email 长度需小于 30",
 		},
 	}
-	opts := govalidator.Options{
-		Data:          data,
-		Rules:         rules,
-		Messages:      messages,
-		TagIdentifier: "valid",
-	}
-	return govalidator.New(opts).ValidateStruct()
+
+	return doValidate(data, rules, messages)
 }
