@@ -29,6 +29,7 @@ func SetupDB() {
 			config.Get("database.mysql.database"),
 			config.Get("database.mysql.charset"),
 		)
+		fmt.Println("dsn:", dsn)
 		dbConfig = mysql.New(mysql.Config{
 			DSN: dsn,
 		})
@@ -40,6 +41,7 @@ func SetupDB() {
 		panic(errors.New("database connection not supported"))
 	}
 
+	fmt.Println("dbConfig", dbConfig)
 	// 连接数据库，并设置 GORM 的日志模式
 	database.Connect(dbConfig, logger.Default.LogMode(logger.Info))
 
@@ -50,5 +52,8 @@ func SetupDB() {
 	// 设置每个链接的过期时间
 	database.SQLDB.SetConnMaxLifetime(time.Duration(config.GetInt("database.mysql.max_life_seconds")) * time.Second)
 
-	database.DB.AutoMigrate(&user.User{})
+	err := database.DB.AutoMigrate(&user.User{})
+	if err != nil {
+		fmt.Println("AutoMigrate error", err.Error())
+	}
 }
