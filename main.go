@@ -25,6 +25,9 @@ func main() {
 	// 初始化 Logger
 	bootstrap.SetupLogger()
 
+	// 设置 gin 的运行模式，支持 debug, release, test
+	gin.SetMode(gin.ReleaseMode)
+
 	// 初始化Gin实例
 	router := gin.New()
 

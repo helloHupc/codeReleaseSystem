@@ -1,0 +1,1 @@
+{"level":"INFO","time":"2025-03-26 18:34:20","caller":"middlewares/logger.go:85","msg":"Request processed","status":200,"method":"POST","path":"/v1/auth/signup/email/exist","ip":"::1","latency":0.0010503,"request_body":"{\"email\":\"1@t.com\"}","response_body":"{\"exist\":true}"}
