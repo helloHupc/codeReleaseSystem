@@ -6,6 +6,7 @@ import (
 	"codeReleaseSystem/pkg/config"
 	"flag"
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,12 +22,15 @@ func main() {
 	flag.Parse()
 	config.InitConfig(env)
 
+	// 初始化 Logger
+	bootstrap.SetupLogger()
+
 	// 初始化Gin实例
 	router := gin.New()
 
 	// 初始化 DB
 	bootstrap.SetupDB()
-	
+
 	// 初始化路由绑定
 	bootstrap.SetupRoute(router)
 
