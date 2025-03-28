@@ -30,6 +30,7 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) {
 }
 
 func (sc *SignupController) IsEmailExist(c *gin.Context) {
+	panic("test panic")
 	param := requests.SignupEmailExistRequest{}
 	if ok, errs := requests.ValidateRequest(c, &param, requests.ValidateSignupEmailExist); !ok {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": errs})
