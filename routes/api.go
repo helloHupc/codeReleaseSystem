@@ -2,8 +2,9 @@ package routes
 
 import (
 	"codeReleaseSystem/app/http/controllers/api/v1/auth"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func RegisterAPIRoutes(r *gin.Engine) {
@@ -24,6 +25,11 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			authGroup.POST("/signup/phone/exist", suc.IsPhoneExist)
 			// 判断邮箱是否已注册
 			authGroup.POST("/signup/email/exist", suc.IsEmailExist)
+
+			// 验证码相关
+			cc := new(auth.CaptchaController)
+			authGroup.GET("/captcha", cc.Generate)
+			authGroup.POST("/captcha/verify", cc.Verify)
 		}
 	}
 

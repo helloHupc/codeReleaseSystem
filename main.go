@@ -37,6 +37,9 @@ func main() {
 	// 初始化 Redis
 	bootstrap.SetupRedis()
 
+	// 初始化验证码
+	bootstrap.SetupCaptcha()
+
 	// 初始化路由绑定
 	bootstrap.SetupRoute(router)
 
