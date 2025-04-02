@@ -25,6 +25,8 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			authGroup.POST("/signup/phone/exist", suc.IsPhoneExist)
 			// 判断邮箱是否已注册
 			authGroup.POST("/signup/email/exist", suc.IsEmailExist)
+			// 发送邮件验证码
+			authGroup.POST("/signup/email/send", suc.SendEmail)
 
 			// 验证码相关
 			cc := new(auth.CaptchaController)

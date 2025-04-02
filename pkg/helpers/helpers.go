@@ -1,6 +1,10 @@
 package helpers
 
-import "reflect"
+import (
+	"math/rand"
+	"reflect"
+	"time"
+)
 
 // Empty 类似于 PHP 的 empty() 函数
 func Empty(val interface{}) bool {
@@ -26,4 +30,22 @@ func Empty(val interface{}) bool {
 	default:
 		return false
 	}
+}
+
+// GenerateRandomNumber 生成指定长度的随机数字字符串
+func GenerateRandomNumber(length int) string {
+	if length <= 0 {
+		return ""
+	}
+
+	// 使用独立的随机数生成器
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	numbers := "0123456789"
+	result := make([]byte, length)
+
+	for i := 0; i < length; i++ {
+		result[i] = numbers[r.Intn(len(numbers))]
+	}
+
+	return string(result)
 }
